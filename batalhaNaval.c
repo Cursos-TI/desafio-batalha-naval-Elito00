@@ -1,97 +1,67 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define TAM 10
-#define TAM_NAVIO 3
-#define VALOR_AGUA 0
-#define VALOR_NAVIO 3
 
-int main() {
-    int tabuleiro[TAM][TAM] = {0};
-
-    // -------------------- NAVIO HORIZONTAL --------------------
-    int linha_horizontal = 2, coluna_horizontal = 3;
-    printf("Navio Horizontal:\n");
-    for (int i = 0; i < TAM_NAVIO; i++) {
-        int linha = linha_horizontal;
-        int coluna = coluna_horizontal + i;
-
-        if (coluna < TAM) {
-            tabuleiro[linha][coluna] = VALOR_NAVIO;
-            printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
-        }
-    }
-
-    // -------------------- NAVIO VERTICAL --------------------
-    int linha_vertical = 5, coluna_vertical = 7;
-    printf("\nNavio Vertical:\n");
-    for (int i = 0; i < TAM_NAVIO; i++) {
-        int linha = linha_vertical + i;
-        int coluna = coluna_vertical;
-
-        if (linha < TAM) {
-            tabuleiro[linha][coluna] = VALOR_NAVIO;
-            printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
-        }
-    }
-
-    // -------------------- NAVIO DIAGONAL PRINCIPAL ↘️ --------------------
-    int linha_diag1 = 0, coluna_diag1 = 0;
-    printf("\nNavio Diagonal Principal:\n");
-    for (int i = 0; i < TAM_NAVIO; i++) {
-        int linha = linha_diag1 + i;
-        int coluna = coluna_diag1 + i;
-
-        if (linha < TAM && coluna < TAM) {
-            tabuleiro[linha][coluna] = VALOR_NAVIO;
-            printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
-        }
-    }
-
-    // -------------------- NAVIO DIAGONAL SECUNDÁRIA ↙️ --------------------
-    int linha_diag2 = 0, coluna_diag2 = 9;
-    printf("\nNavio Diagonal Secundária:\n");
-    for (int i = 0; i < TAM_NAVIO; i++) {
-        int linha = linha_diag2 + i;
-        int coluna = coluna_diag2 - i;
-
-        if (linha < TAM && coluna >= 0) {
-            tabuleiro[linha][coluna] = VALOR_NAVIO;
-            printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
-        }
-    }
-
-    // -------------------- EXIBIÇÃO FINAL DO TABULEIRO --------------------
-    printf("\nTabuleiro Final:\n");
+// Função para exibir o tabuleiro de habilidade
+void exibirMatriz(int matriz[TAM][TAM], const char* nome) {
+    printf("\nHabilidade: %s\n", nome);
     for (int i = 0; i < TAM; i++) {
         for (int j = 0; j < TAM; j++) {
-            printf("%d ", tabuleiro[i][j]);
+            printf("%d ", matriz[i][j]);
         }
         printf("\n");
     }
+}
+
+int main() {
+    // Matrizes para cada habilidade
+    int cone[TAM][TAM] = {0};
+    int cruz[TAM][TAM] = {0};
+    int octaedro[TAM][TAM] = {0};
+
+    // Ponto de origem comum para todas (pode ser ajustado)
+    int origemX = 5;
+    int origemY = 5;
+
+    // -------------------- HABILIDADE: CONE --------------------
+    // Exemplo: cone triangular para "baixo"
+    for (int i = 0; i < 3; i++) { // altura do cone
+        for (int j = -i; j <= i; j++) {
+            int x = origemX + i;
+            int y = origemY + j;
+            if (x >= 0 && x < TAM && y >= 0 && y < TAM) {
+                cone[x][y] = 1;
+            }
+        }
+    }
+
+    // -------------------- HABILIDADE: CRUZ --------------------
+    cruz[origemX][origemY] = 1;
+    for (int i = 1; i <= 2; i++) {
+        if (origemX + i < TAM) cruz[origemX + i][origemY] = 1;
+        if (origemX - i >= 0) cruz[origemX - i][origemY] = 1;
+        if (origemY + i < TAM) cruz[origemX][origemY + i] = 1;
+        if (origemY - i >= 0) cruz[origemX][origemY - i] = 1;
+    }
+
+    // -------------------- HABILIDADE: OCTAEDRO --------------------
+    for (int dx = -2; dx <= 2; dx++) {
+        for (int dy = -2; dy <= 2; dy++) {
+            if (abs(dx) + abs(dy) <= 2) { // forma de losango
+                int x = origemX + dx;
+                int y = origemY + dy;
+                if (x >= 0 && x < TAM && y >= 0 && y < TAM) {
+                    octaedro[x][y] = 1;
+                }
+            }
+        }
+    }
+
+    // Exibe todas as matrizes com as áreas atingidas
+    exibirMatriz(cone, "Cone");
+    exibirMatriz(cruz, "Cruz");
+    exibirMatriz(octaedro, "Octaedro");
 
     return 0;
 }
-
-
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
-
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
-
-
