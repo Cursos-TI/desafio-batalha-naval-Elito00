@@ -1,61 +1,77 @@
 #include <stdio.h>
 
-int main() {
+#define TAM 10
+#define TAM_NAVIO 3
+#define VALOR_AGUA 0
+#define VALOR_NAVIO 3
 
-    #define TAM 10
-    #define TAM_NAVIO 3
-    #define VALOR_AGUA 0
-    #define VALOR_NAVIO 3
-    
-        // Declaração do tabuleiro e inicialização com água (0)
-        int tabuleiro[TAM][TAM] = {0};
-    
-        // Coordenadas iniciais para os navios
-        int linha_horizontal = 2, coluna_horizontal = 3;
-        int linha_vertical = 5, coluna_vertical = 7;
-    
-        // Posiciona navio horizontalmente (mesma linha, colunas consecutivas)
-        printf("Navio Horizontal:\n");
-        for (int i = 0; i < TAM_NAVIO; i++) {
-            int linha = linha_horizontal;
-            int coluna = coluna_horizontal + i;
-    
-            // Verificação de limite
-            if (coluna < TAM) {
-                tabuleiro[linha][coluna] = VALOR_NAVIO;
-                printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
-            }
+int main() {
+    int tabuleiro[TAM][TAM] = {0};
+
+    // -------------------- NAVIO HORIZONTAL --------------------
+    int linha_horizontal = 2, coluna_horizontal = 3;
+    printf("Navio Horizontal:\n");
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        int linha = linha_horizontal;
+        int coluna = coluna_horizontal + i;
+
+        if (coluna < TAM) {
+            tabuleiro[linha][coluna] = VALOR_NAVIO;
+            printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
         }
-    
-        // Posiciona navio verticalmente (mesma coluna, linhas consecutivas)
-        printf("\nNavio Vertical:\n");
-        for (int i = 0; i < TAM_NAVIO; i++) {
-            int linha = linha_vertical + i;
-            int coluna = coluna_vertical;
-    
-            // Verificação de limite
-            if (linha < TAM) {
-                tabuleiro[linha][coluna] = VALOR_NAVIO;
-                printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
-            }
-        }
-    
-        // Exibição final do tabuleiro (opcional, mas útil)
-        printf("\nTabuleiro Final:\n");
-        for (int i = 0; i < TAM; i++) {
-            for (int j = 0; j < TAM; j++) {
-                printf("%d ", tabuleiro[i][j]);
-            }
-            printf("\n");
-        }
-    
-        return 0;
     }
-    
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+
+    // -------------------- NAVIO VERTICAL --------------------
+    int linha_vertical = 5, coluna_vertical = 7;
+    printf("\nNavio Vertical:\n");
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        int linha = linha_vertical + i;
+        int coluna = coluna_vertical;
+
+        if (linha < TAM) {
+            tabuleiro[linha][coluna] = VALOR_NAVIO;
+            printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
+        }
+    }
+
+    // -------------------- NAVIO DIAGONAL PRINCIPAL ↘️ --------------------
+    int linha_diag1 = 0, coluna_diag1 = 0;
+    printf("\nNavio Diagonal Principal:\n");
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        int linha = linha_diag1 + i;
+        int coluna = coluna_diag1 + i;
+
+        if (linha < TAM && coluna < TAM) {
+            tabuleiro[linha][coluna] = VALOR_NAVIO;
+            printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
+        }
+    }
+
+    // -------------------- NAVIO DIAGONAL SECUNDÁRIA ↙️ --------------------
+    int linha_diag2 = 0, coluna_diag2 = 9;
+    printf("\nNavio Diagonal Secundária:\n");
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        int linha = linha_diag2 + i;
+        int coluna = coluna_diag2 - i;
+
+        if (linha < TAM && coluna >= 0) {
+            tabuleiro[linha][coluna] = VALOR_NAVIO;
+            printf("Parte %d -> (%d, %d)\n", i + 1, linha, coluna);
+        }
+    }
+
+    // -------------------- EXIBIÇÃO FINAL DO TABULEIRO --------------------
+    printf("\nTabuleiro Final:\n");
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
+
 
     // Nível Mestre - Habilidades Especiais com Matrizes
     // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
